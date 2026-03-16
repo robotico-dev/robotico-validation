@@ -1,7 +1,8 @@
 <Project>
-  <PropertyGroup>
-    <RoboticoResultPath Condition="'$(RoboticoResultPath)' == ''">$(MSBuildThisFileDirectory)..\robotico-results-csharp\src\Robotico.Result\Robotico.Result.Lib.csproj</RoboticoResultPath>
-    <UseLocalRoboticoResult Condition="Exists('$(RoboticoResultPath)')">true</UseLocalRoboticoResult>
+  <!-- When building in a workspace that contains robotico-results-csharp, use project reference instead of NuGet. -->
+  <PropertyGroup Condition="Exists('$(MSBuildThisFileDirectory)../robotico-results-csharp/src/Robotico.Result/Robotico.Result.Lib.csproj')">
+    <UseLocalRoboticoResult>true</UseLocalRoboticoResult>
+    <RoboticoResultPath>$(MSBuildThisFileDirectory)../robotico-results-csharp/src/Robotico.Result/Robotico.Result.Lib.csproj</RoboticoResultPath>
   </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
@@ -9,6 +10,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn)</NoWarn>
     <WarningLevel>8</WarningLevel>
     <AnalysisLevel>latest-all</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
@@ -20,10 +22,11 @@
     <Copyright>Copyright © Robotico</Copyright>
     <RepositoryType>git</RepositoryType>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>All</AnalysisMode>
     <PackageId>Robotico.Validation</PackageId>
     <Title>Robotico.Validation</Title>
-    <Description>Result-based validation for .NET. IValidator&lt;T&gt; (Validate returns Result). Depends on Robotico.Result.</Description>
-    <PackageTags>validation;result;robotico</PackageTags>
+    <Description>Result-based validation: IValidator&lt;T&gt; with Validate returning Result. Integrates with Robotico.Result and Robotico.Mediator pipeline.</Description>
+    <PackageTags>validation;result;robotico;mediator;fluent</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 </Project>

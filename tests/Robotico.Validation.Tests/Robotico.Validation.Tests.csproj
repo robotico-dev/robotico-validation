@@ -5,11 +5,16 @@
     <PackageId>Robotico.Validation.Tests</PackageId>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <!-- CA1707: Test method names use underscores. CA1515: Public test classes for discovery. -->
-    <NoWarn>$(NoWarn);CA1707;CA1515;CA1859</NoWarn>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+    <!-- CA1707/CA1515: Test naming and discovery. CA2007: Test code may use plain await. CA1859: Prefer concrete type in tests for clarity. -->
+    <NoWarn>$(NoWarn);CA1707;CA1515;CA2007;CA1859</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
