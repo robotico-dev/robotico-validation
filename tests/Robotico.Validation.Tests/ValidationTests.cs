@@ -1,44 +1,25 @@
-using Robotico.Result.Errors;
-using Robotico.Validation;
-using Xunit;
-
 namespace Robotico.Validation.Tests;
 
-public sealed class AlwaysValidValidator : IValidator<string>
-{
-    public Robotico.Result.Result Validate(string instance) => Robotico.Result.Result.Success();
-}
-
-public sealed class FailingValidator : IValidator<string>
-{
-    public Robotico.Result.Result Validate(string instance)
-    {
-        if (string.IsNullOrEmpty(instance))
-        {
-            return ValidationErrors.ForField("value", "Value is required.");
-        }
-
-        return Robotico.Result.Result.Success();
-    }
-}
-
+/// <summary>
+/// Tests for <see cref="IValidator{T}"/>, <see cref="ValidationErrors"/>, and <see cref="ValidationErrorsBuilder"/>: success/failure, ForField, ToResult, builder behavior, and argument validation.
+/// </summary>
 public sealed class ValidationTests
 {
     [Fact]
     public void Validator_Validate_returns_success_when_valid()
     {
-        AlwaysValidValidator validator = new AlwaysValidValidator();
-        Robotico.Result.Result r = validator.Validate("x");
+        AlwaysValidValidator validator = new();
+        VoidResult r = validator.Validate("x");
         Assert.True(r.IsSuccess());
     }
 
     [Fact]
     public void Validator_Validate_returns_validation_error_when_invalid()
     {
-        FailingValidator validator = new FailingValidator();
-        Robotico.Result.Result r = validator.Validate(string.Empty);
+        FailingValidator validator = new();
+        VoidResult r = validator.Validate(string.Empty);
         Assert.False(r.IsSuccess());
-        bool isError = r.IsError(out Robotico.Result.Errors.IError? error);
+        bool isError = r.IsError(out IError? error);
         Assert.True(isError);
         Assert.NotNull(error);
         Assert.IsType<ValidationError>(error);
@@ -51,9 +32,9 @@ public sealed class ValidationTests
     [Fact]
     public void ValidationErrors_ForField_returns_failed_result_with_single_message()
     {
-        Robotico.Result.Result r = ValidationErrors.ForField("email", "Invalid format.");
+        VoidResult r = ValidationErrors.ForField("email", "Invalid format.");
         Assert.False(r.IsSuccess());
-        r.IsError(out Robotico.Result.Errors.IError? err);
+        r.IsError(out IError? err);
         ValidationError ve = Assert.IsType<ValidationError>(err);
         Assert.Single(ve.Errors["email"]);
         Assert.Equal("Invalid format.", ve.Errors["email"][0]);
@@ -62,9 +43,9 @@ public sealed class ValidationTests
     [Fact]
     public void ValidationErrors_ForField_multiple_messages_returns_failed_result()
     {
-        Robotico.Result.Result r = ValidationErrors.ForField("name", "Required.", "Too short.");
+        VoidResult r = ValidationErrors.ForField("name", "Required.", "Too short.");
         Assert.False(r.IsSuccess());
-        r.IsError(out Robotico.Result.Errors.IError? err);
+        r.IsError(out IError? err);
         ValidationError ve = Assert.IsType<ValidationError>(err);
         Assert.Equal(2, ve.Errors["name"].Length);
         Assert.Contains("Required.", ve.Errors["name"]);
@@ -74,14 +55,14 @@ public sealed class ValidationTests
     [Fact]
     public void ValidationErrors_ToResult_with_dictionary_returns_failed_result()
     {
-        Dictionary<string, string[]> errors = new Dictionary<string, string[]>
+        Dictionary<string, string[]> errors = new()
         {
             ["a"] = ["error A"],
             ["b"] = ["error B1", "error B2"]
         };
-        Robotico.Result.Result r = ValidationErrors.ToResult(errors, "Custom message", "CUSTOM");
+        VoidResult r = ValidationErrors.ToResult(errors, "Custom message", "CUSTOM");
         Assert.False(r.IsSuccess());
-        r.IsError(out Robotico.Result.Errors.IError? err);
+        r.IsError(out IError? err);
         ValidationError ve = Assert.IsType<ValidationError>(err);
         Assert.Equal(2, ve.Errors.Count);
         Assert.Equal("Custom message", ve.Message);
@@ -92,7 +73,7 @@ public sealed class ValidationTests
     public void ValidationErrors_Builder_ToResult_success_when_no_errors()
     {
         ValidationErrorsBuilder builder = ValidationErrors.CreateBuilder();
-        Robotico.Result.Result r = builder.ToResult();
+        VoidResult r = builder.ToResult();
         Assert.True(r.IsSuccess());
         Assert.False(builder.HasErrors);
     }
@@ -103,9 +84,9 @@ public sealed class ValidationTests
         ValidationErrorsBuilder builder = ValidationErrors.CreateBuilder();
         builder.Add("x", "err1").Add("x", "err2").Add("y", "err3");
         Assert.True(builder.HasErrors);
-        Robotico.Result.Result r = builder.ToResult();
+        VoidResult r = builder.ToResult();
         Assert.False(r.IsSuccess());
-        r.IsError(out Robotico.Result.Errors.IError? err);
+        r.IsError(out IError? err);
         ValidationError ve = Assert.IsType<ValidationError>(err);
         Assert.Equal(2, ve.Errors.Count);
         Assert.Equal(2, ve.Errors["x"].Length);
@@ -158,5 +139,23 @@ public sealed class ValidationTests
     {
         ValidationErrorsBuilder builder = ValidationErrors.CreateBuilder();
         Assert.Throws<ArgumentNullException>(() => builder.Add("field", null!));
+    }
+}
+
+internal sealed class AlwaysValidValidator : IValidator<string>
+{
+    public VoidResult Validate(string instance) => VoidResult.Success();
+}
+
+internal sealed class FailingValidator : IValidator<string>
+{
+    public VoidResult Validate(string instance)
+    {
+        if (string.IsNullOrEmpty(instance))
+        {
+            return ValidationErrors.ForField("value", "Value is required.");
+        }
+
+        return VoidResult.Success();
     }
 }

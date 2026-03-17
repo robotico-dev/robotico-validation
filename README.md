@@ -68,13 +68,23 @@ With coverage:
 dotnet test tests/Robotico.Validation.Tests/Robotico.Validation.Tests.csproj -c Release --collect:"XPlat Code Coverage"
 ```
 
-Optional CI gate (fail if line coverage below threshold):
+Principal quality target: **90% line coverage**. Optional CI gate (fail if below threshold) using the included runsettings:
+
+```bash
+dotnet test tests/Robotico.Validation.Tests/Robotico.Validation.Tests.csproj -c Release --collect:"XPlat Code Coverage" --settings tests/Robotico.Validation.Tests/coverlet.runsettings
+```
+
+Or with inline properties:
 
 ```bash
 dotnet test tests/Robotico.Validation.Tests/Robotico.Validation.Tests.csproj -c Release --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:Threshold=90 /p:ThresholdType=line
 ```
 
 Or open `robotico-validation.slnx` in your IDE and build from there.
+
+## Contributing
+
+Run tests and coverage locally (see [Building and testing](#building-and-testing)). Open a pull request; ensure the build and 90% line-coverage gate pass. Code style is enforced via `.editorconfig` and analyzers.
 
 ## License
 

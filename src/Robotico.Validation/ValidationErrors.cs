@@ -12,9 +12,16 @@ public static class ValidationErrors
     /// <param name="message">Optional summary message. If null, a default is generated.</param>
     /// <param name="code">Error code. Defaults to "VAL_FAILED".</param>
     /// <returns>A failed <see cref="Robotico.Result.Result"/> with a <see cref="Robotico.Result.Errors.ValidationError"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="errors"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="errors"/> is empty (at least one field error is required).</exception>
     public static Robotico.Result.Result ToResult(IReadOnlyDictionary<string, string[]> errors, string? message = null, string code = "VAL_FAILED")
     {
         ArgumentNullException.ThrowIfNull(errors);
+        if (errors.Count == 0)
+        {
+            throw new ArgumentException("At least one validation error is required.", nameof(errors));
+        }
+
         return Robotico.Result.Result.ValidationError(errors, message, code);
     }
 
@@ -32,7 +39,7 @@ public static class ValidationErrors
             throw new ArgumentException("At least one error message is required", nameof(errorMessages));
         }
 
-        Dictionary<string, string[]> errors = new Dictionary<string, string[]>
+        Dictionary<string, string[]> errors = new()
         {
             [fieldName] = errorMessages
         };
@@ -43,5 +50,5 @@ public static class ValidationErrors
     /// <summary>
     /// Creates a new builder to collect field errors.
     /// </summary>
-    public static ValidationErrorsBuilder CreateBuilder() => new ValidationErrorsBuilder();
+    public static ValidationErrorsBuilder CreateBuilder() => new();
 }

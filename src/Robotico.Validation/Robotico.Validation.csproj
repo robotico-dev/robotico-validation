@@ -2,6 +2,7 @@
   <PropertyGroup>
     <RootNamespace>Robotico.Validation</RootNamespace>
     <AssemblyName>Robotico.Validation</AssemblyName>
+    <PackageIcon>logosquare.png</PackageIcon>
     <PackageProjectUrl>https://github.com/robotico-dev/robotico-validation-csharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/robotico-dev/robotico-validation-csharp</RepositoryUrl>
     <RepositoryBranch>main</RepositoryBranch>
@@ -12,12 +13,14 @@
   <!-- Version, Description, PackageReadmeFile from Directory.Build.props -->
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" Visible="false" />
+    <!-- Package icon: single source at repo assets. -->
+    <None Include="..\..\assets\logosquare.png" Pack="true" PackagePath="\" Link="logosquare.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup Condition="'$(UseLocalRoboticoResult)' != 'true'">
-    <PackageReference Include="Robotico.Result" Version="1.*" />
+    <PackageReference Include="Robotico.Result" />
   </ItemGroup>
   <ItemGroup Condition="'$(UseLocalRoboticoResult)' == 'true'">
     <ProjectReference Include="$(RoboticoResultPath)" />

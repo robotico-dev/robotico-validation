@@ -6,12 +6,16 @@ namespace Robotico.Validation;
 /// On failure, return <see cref="Robotico.Result.Result.ValidationError(IReadOnlyDictionary{string, string[]}, string?, string)"/> or use <see cref="ValidationErrors"/> to build the dictionary.
 /// </summary>
 /// <typeparam name="T">The type to validate.</typeparam>
+/// <remarks>
+/// <para><b>When to use</b>: Implement for request/command types that need validation before handling. Compose <see cref="IRule{T}"/> instances or use <see cref="Rule.ValidateAll"/> for multiple rules.</para>
+/// <para><b>Null instance</b>: Implementations may receive a null instance (e.g. from middleware); they may throw <see cref="ArgumentNullException"/> or return a validation error.</para>
+/// </remarks>
 public interface IValidator<in T>
 {
     /// <summary>
     /// Validates <paramref name="instance"/>. Returns <see cref="Robotico.Result.Result.Success()"/> if valid; otherwise a failed Result (e.g. <see cref="Robotico.Result.Errors.ValidationError"/>).
     /// </summary>
-    /// <param name="instance">The instance to validate.</param>
+    /// <param name="instance">The instance to validate. May be null; implementations may throw or return a validation error.</param>
     /// <returns>Success if valid; <see cref="Robotico.Result.Result.ValidationError(IReadOnlyDictionary{string, string[]}, string?, string)"/> if invalid.</returns>
     Robotico.Result.Result Validate(T instance);
 }
