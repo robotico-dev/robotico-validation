@@ -63,7 +63,7 @@ public sealed class RuleTests
     [Fact]
     public void Rule_ValidateAll_empty_rules_returns_success()
     {
-        VoidResult r = Rule.ValidateAll(42, Array.Empty<IRule<int>>());
+        VoidResult r = Rule.ValidateAll(42, []);
         Assert.True(r.IsSuccess());
     }
 
