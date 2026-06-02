@@ -1,4 +1,6 @@
 # Robotico.Validation
+[![Woodpecker CI](https://dvalin.robotico.dev/api/badges/robotico/robotico-validation/status.svg)](https://dvalin.robotico.dev/robotico/robotico-validation)
+
 
 Result-based validation for .NET 8 and .NET 10. Defines `IValidator<T>` (Validate returns `Result`). Integrates with **Robotico.Mediator**'s validation pipeline and **Robotico.Result** for validation errors.
 
