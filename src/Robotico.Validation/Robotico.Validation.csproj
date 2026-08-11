@@ -3,7 +3,7 @@
     <RootNamespace>Robotico.Validation</RootNamespace>
     <AssemblyName>Robotico.Validation</AssemblyName>
     <PackageIcon>logosquare.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/robotico-dev/robotico-validation-csharp</PackageProjectUrl>
+    <PackageProjectUrl>https://download.robotico.dev</PackageProjectUrl>
     <RepositoryUrl>https://github.com/robotico-dev/robotico-validation-csharp</RepositoryUrl>
     <RepositoryBranch>main</RepositoryBranch>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
